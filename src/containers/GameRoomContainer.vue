@@ -1,17 +1,17 @@
 <template>
   <v-main>
-    <GameRoomContainer />
+    <GameRoom />
   </v-main>
 </template>
 
 <script>
-import GameRoomContainer from "./containers/GameRoomContainer";
+import GameRoom from "../components/GameRoom";
 
 export default {
   name: "App",
 
   components: {
-    GameRoomContainer
+    GameRoom
   },
 
   data: () => ({
