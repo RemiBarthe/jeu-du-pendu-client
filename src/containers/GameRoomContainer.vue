@@ -1,14 +1,14 @@
 <template>
-  <v-main>
+  <div>
     <GameRoom />
-  </v-main>
+  </div>
 </template>
 
 <script>
 import GameRoom from "../components/GameRoom";
 
 export default {
-  name: "App",
+  name: "GameRoomContainer",
 
   components: {
     GameRoom

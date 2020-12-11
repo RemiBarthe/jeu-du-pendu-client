@@ -1,7 +1,9 @@
 <template>
-  <v-main>
-    <GameRoomContainer />
-  </v-main>
+  <v-app>
+    <v-main>
+      <GameRoomContainer />
+    </v-main>
+  </v-app>
 </template>
 
 <script>
