@@ -60,5 +60,6 @@ export default {
 .list-letters p {
   font-size: 50px;
   text-align: center;
+  margin: 0;
 }
 </style>
