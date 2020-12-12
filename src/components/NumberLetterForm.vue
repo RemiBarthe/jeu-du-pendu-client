@@ -1,16 +1,18 @@
 <template>
-  <v-container>
-    <h2>Combien de lettres dans le mot ? (2-21)</h2>
+  <v-container class="center-container">
+    <p class="style-title">Combien de lettres dans le mot ? (2-21)</p>
+    <div class="position-number">
+      <p class="size-number">{{ number }}</p>
 
-    <p class="size-number">{{ number }}</p>
-
-    <v-btn large color="error" class="ma-2" @click="decrementNumber">
-      <v-icon dark> mdi-minus </v-icon></v-btn
-    >
-    <v-btn large color="primary" class="ma-2" @click="incrementNumber">
-      <v-icon dark> mdi-plus </v-icon></v-btn
-    >
-
+      <div class="position-buttons">
+        <v-btn x-small fab color="info" class="ma-2" @click="incrementNumber">
+          <v-icon dark> mdi-plus </v-icon>
+        </v-btn>
+        <v-btn x-small fab color="error" class="ma-2" @click="decrementNumber">
+          <v-icon dark> mdi-minus </v-icon>
+        </v-btn>
+      </div>
+    </div>
     <v-btn large color="success" class="ma-2" @click="onSubmit">
       Valider
     </v-btn>
@@ -43,6 +45,31 @@ export default {
 </script>
 <style>
 .size-number {
+  margin-bottom: 0 !important;
+  margin-right: 5px;
   font-size: 75px;
+}
+.center-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-flow: column;
+  height: 100vh;
+}
+.position-number {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.position-buttons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-flow: column;
+}
+.style-title {
+  font-size: 40px;
+  padding-bottom: 10px;
 }
 </style>
