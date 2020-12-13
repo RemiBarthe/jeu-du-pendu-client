@@ -38,7 +38,11 @@ export default {
       }
     },
     onSubmit() {
-      this.$emit("submitted", this.number);
+      let letters = [];
+      for (let i = 1; i <= this.number; i++) {
+        letters.push({ position: i, value: " " });
+      }
+      this.$emit("submitted", letters);
     }
   }
 };
