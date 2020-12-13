@@ -1,44 +1,23 @@
 <template>
   <v-container>
-    <div class="list-letters">
-      <v-card outlined>
-        <p>C</p>
+    <transition-group name="slideDown" appear tag="div" class="list-letters">
+      <v-card color="red" v-for="index in wordLength" :key="index" outlined>
       </v-card>
-
-      <v-card outlined>
-        <p>H</p>
-      </v-card>
-
-      <v-card outlined>
-        <p>A</p>
-      </v-card>
-
-      <v-card outlined>
-        <p>I</p>
-      </v-card>
-
-      <v-card outlined>
-        <p>S</p>
-      </v-card>
-
-      <v-card outlined>
-        <p>E</p>
-      </v-card>
-    </div>
-    <v-row justify="center">
-      <v-dialog v-model="selectedWord" width="600px">
-        <v-card>
-          <v-card-title class="justify-center">
-            Cette lettre fait partie de votre mot ?
-          </v-card-title>
-          <h1 class="text-center">H</h1>
-          <v-card-actions class="justify-center">
-            <v-btn class="primary" rounded @click="Validate()"> Oui </v-btn>
-            <v-btn class="error" rounded @click="Decline()"> Non </v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
-    </v-row>
+      <v-row justify="center">
+        <v-dialog v-model="selectedWord" width="600px">
+          <v-card>
+            <v-card-title class="justify-center">
+              Cette lettre fait partie de votre mot ?
+            </v-card-title>
+            <h1 class="text-center">H</h1>
+            <v-card-actions class="justify-center">
+              <v-btn class="primary" rounded @click="Validate()"> Oui </v-btn>
+              <v-btn class="error" rounded @click="Decline()"> Non </v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+      </v-row>
+    </transition-group>
   </v-container>
 </template>
 
@@ -50,6 +29,8 @@ export default {
   data: () => ({
     selectedWord: true
   }),
+
+  props: ["wordLength"],
 
   methods: {
     Validate() {
