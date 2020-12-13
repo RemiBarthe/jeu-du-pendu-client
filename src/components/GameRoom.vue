@@ -25,14 +25,42 @@
         <p>E</p>
       </v-card>
     </div>
+    <v-row justify="center">
+      <v-dialog v-model="selectedWord" width="600px">
+        <v-card>
+          <v-card-title class="justify-center">
+            Cette lettre fait partie de votre mot ?
+          </v-card-title>
+          <h1 class="text-center">H</h1>
+          <v-card-actions class="justify-center">
+            <v-btn class="primary" rounded @click="Validate()"> Oui </v-btn>
+            <v-btn class="error" rounded @click="Decline()"> Non </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+    </v-row>
   </v-container>
 </template>
+
 
 <script>
 export default {
   name: "GameRoom",
 
-  data: () => ({})
+  data: () => ({
+    selectedWord: true
+  }),
+
+  methods: {
+    Validate() {
+      console.log("oui");
+      this.selectedWord = false;
+    },
+    Decline() {
+      console.log("Non");
+      this.selectedWord = false;
+    }
+  }
 };
 </script>
 
@@ -47,7 +75,6 @@ export default {
   align-items: center;
   justify-content: center;
 }
-
 .list-letters .v-card {
   margin: 5px;
   width: 80px;
