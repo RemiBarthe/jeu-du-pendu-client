@@ -38,7 +38,7 @@ export default {
       }
     },
     onSubmit() {
-      this.$emit("submitted");
+      this.$emit("submitted", this.number);
     }
   }
 };

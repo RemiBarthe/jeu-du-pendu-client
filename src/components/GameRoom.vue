@@ -1,29 +1,7 @@
 <template>
   <v-container>
     <div class="list-letters">
-      <v-card outlined>
-        <p>C</p>
-      </v-card>
-
-      <v-card outlined>
-        <p>H</p>
-      </v-card>
-
-      <v-card outlined>
-        <p>A</p>
-      </v-card>
-
-      <v-card outlined>
-        <p>I</p>
-      </v-card>
-
-      <v-card outlined>
-        <p>S</p>
-      </v-card>
-
-      <v-card outlined>
-        <p>E</p>
-      </v-card>
+      <v-card v-for="index in wordLength" :key="index" outlined> </v-card>
     </div>
   </v-container>
 </template>
@@ -32,7 +10,8 @@
 export default {
   name: "GameRoom",
 
-  data: () => ({})
+  data: () => ({}),
+  props: ["wordLength"]
 };
 </script>
 

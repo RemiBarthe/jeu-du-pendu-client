@@ -1,7 +1,7 @@
 <template>
   <div>
-    <NumberLetterForm @submitted="isSubmited = true" v-if="!isSubmited" />
-    <GameRoom v-else />
+    <NumberLetterForm @submitted="isSubmit" v-if="!wordLength" />
+    <GameRoom :wordLength="wordLength" v-else />
   </div>
 </template>
 
@@ -18,7 +18,12 @@ export default {
   },
 
   data: () => ({
-    isSubmited: false
-  })
+    wordLength: 0
+  }),
+  methods: {
+    isSubmit(number) {
+      this.wordLength = number;
+    }
+  }
 };
 </script>
