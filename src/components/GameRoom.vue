@@ -27,36 +27,16 @@
     </div>
     <v-row justify="center">
       <v-dialog v-model="selectedWord" width="600px">
-        <template v-slot:activator="{ on, attrs }">
-          <v-btn
-            color="primary"
-            dark
-            v-bind="attrs"
-            v-on="on"
-            @click="dialog = true"
-          >
-            test
-          </v-btn>
-        </template>
-        <div align="center">
-          <v-card width="370">
-            <v-card-title>
-              Cette lettre fait partie de votre mot ?
-            </v-card-title>
-            <h1 class="letter">H</h1>
-            <v-card-actions>
-              <v-spacer></v-spacer>
-              <div class="align-center">
-                <v-btn class="validateBtn" rounded outlined @click="Validate()">
-                  Oui
-                </v-btn>
-                <v-btn class="declineBtn" rounded outlined @click="Decline()">
-                  Non
-                </v-btn>
-              </div>
-            </v-card-actions>
-          </v-card>
-        </div>
+        <v-card>
+          <v-card-title class="justify-center">
+            Cette lettre fait partie de votre mot ?
+          </v-card-title>
+          <h1 class="text-center">H</h1>
+          <v-card-actions class="justify-center">
+            <v-btn class="primary" rounded @click="Validate()"> Oui </v-btn>
+            <v-btn class="error" rounded @click="Decline()"> Non </v-btn>
+          </v-card-actions>
+        </v-card>
       </v-dialog>
     </v-row>
   </v-container>
@@ -94,15 +74,6 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-}
-.letter {
-  margin: 30px;
-}
-.declineBtn {
-  margin-right: 100px;
-}
-.validateBtn {
-  margin-right: 25px;
 }
 .list-letters .v-card {
   margin: 5px;
