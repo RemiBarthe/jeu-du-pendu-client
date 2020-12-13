@@ -1,8 +1,9 @@
 <template>
   <v-container>
-    <div class="list-letters">
-      <v-card v-for="index in wordLength" :key="index" outlined> </v-card>
-    </div>
+    <transition-group name="slideDown" appear tag="div" class="list-letters">
+      <v-card color="red" v-for="index in wordLength" :key="index" outlined>
+      </v-card>
+    </transition-group>
   </v-container>
 </template>
 
