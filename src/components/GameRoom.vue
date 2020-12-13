@@ -3,21 +3,21 @@
     <transition-group name="slideDown" appear tag="div" class="list-letters">
       <v-card color="red" v-for="index in wordLength" :key="index" outlined>
       </v-card>
-      <v-row justify="center">
-        <v-dialog v-model="selectedWord" width="600px">
-          <v-card>
-            <v-card-title class="justify-center">
-              Cette lettre fait partie de votre mot ?
-            </v-card-title>
-            <h1 class="text-center">H</h1>
-            <v-card-actions class="justify-center">
-              <v-btn class="primary" rounded @click="Validate()"> Oui </v-btn>
-              <v-btn class="error" rounded @click="Decline()"> Non </v-btn>
-            </v-card-actions>
-          </v-card>
-        </v-dialog>
-      </v-row>
     </transition-group>
+    <v-row justify="center">
+      <v-dialog v-model="selectedWord" width="600px">
+        <v-card>
+          <v-card-title class="justify-center">
+            Cette lettre fait partie de votre mot ?
+          </v-card-title>
+          <h1 class="text-center">H</h1>
+          <v-card-actions class="justify-center">
+            <v-btn class="primary" rounded @click="Validate()"> Oui </v-btn>
+            <v-btn class="error" rounded @click="Decline()"> Non </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+    </v-row>
   </v-container>
 </template>
 
@@ -27,10 +27,16 @@ export default {
   name: "GameRoom",
 
   data: () => ({
-    selectedWord: true
+    selectedWord: false
   }),
 
   props: ["wordLength"],
+
+  created() {
+    setTimeout(() => {
+      this.selectedWord = true;
+    }, 1200);
+  },
 
   methods: {
     Validate() {
