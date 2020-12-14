@@ -8,7 +8,7 @@
     <transition-group name="slideDown" appear tag="div" class="list-letters">
       <v-card
         @click="selectLetter(letter.position)"
-        color="red"
+        :class="{ red: !letter.value, blue: letter.value }"
         v-for="letter in word"
         :key="letter.position"
         outlined
@@ -29,7 +29,7 @@
           <v-card-title class="justify-center">
             Cette lettre fait partie de votre mot ?
           </v-card-title>
-          <h1 class="text-center">{{ letterPossible }}</h1>
+          <h1 class="text-center uppercase-modal">{{ letterPossible }}</h1>
           <v-card-actions class="justify-center">
             <v-btn class="primary" rounded @click="modalValidateLetter">
               Oui
@@ -55,14 +55,15 @@ export default {
     tittleWhereIsLetter: false,
     letterPossible: "",
     letters: "",
-    positions: ""
+    positions: "",
+    askedLetter: []
   }),
 
   props: ["word"],
 
   created() {
     setTimeout(() => {
-      this.askLetter("E");
+      this.askLetter("e");
     }, 1200);
   },
 
@@ -72,7 +73,7 @@ export default {
       this.tittleWhereIsLetter = true;
     },
     modalDeclineLetter() {
-      this.addToLettersPositions(0);
+      this.noLettersPosition();
       this.getWords();
     },
     confirmLetter() {
@@ -82,21 +83,39 @@ export default {
     askLetter(letter) {
       this.modalLetterChoose = true;
       this.letterPossible = letter;
+      this.askedLetter.push(letter);
     },
     selectLetter(position) {
-      this.word[position - 1].value = this.letterPossible;
-      this.addToLettersPositions(position);
-    },
-    addToLettersPositions(position) {
-      if (this.letters == "") {
-        this.letters += this.letterPossible;
-        this.positions += position;
+      if (this.word[position - 1].value === this.letterPossible) {
+        this.word[position - 1].value = "";
       } else {
-        this.letters += "," + this.letterPossible;
-        this.positions += "," + position;
+        this.word[position - 1].value = this.letterPossible;
       }
     },
+    noLettersPosition() {
+      if (this.letters == "") {
+        this.letters += this.letterPossible;
+        this.positions += 0;
+      } else {
+        this.letters += "," + this.letterPossible;
+        this.positions += "," + 0;
+      }
+    },
+    addToLettersPositions() {
+      this.word.forEach((letter) => {
+        if (letter.value === this.letterPossible) {
+          if (this.letters == "") {
+            this.letters += this.letterPossible;
+            this.positions += letter.position;
+          } else {
+            this.letters += "," + this.letterPossible;
+            this.positions += "," + letter.position;
+          }
+        }
+      });
+    },
     getWords() {
+      this.addToLettersPositions();
       axios
         .get(
           "https://whispering-refuge-98843.herokuapp.com/words?length=" +
@@ -107,9 +126,47 @@ export default {
             this.positions
         )
         .then((response) => {
-          console.log(response);
-          this.askLetter("B");
+          if (response.data.length > 1) {
+            this.getPopularLetter(response.data);
+          } else {
+            console.log(response.data);
+          }
         });
+    },
+    getPopularLetter(response) {
+      let allWord = "";
+
+      response.forEach((word) => {
+        allWord += word.label;
+      });
+
+      this.askedLetter.forEach((letter) => {
+        allWord = allWord.split(letter).join("");
+      });
+
+      this.askLetter(this.maxChar(allWord));
+    },
+    maxChar(str) {
+      const charMap = {};
+      let max = 0;
+      let maxChar = "";
+
+      for (let char of str) {
+        if (charMap[char]) {
+          charMap[char]++;
+        } else {
+          charMap[char] = 1;
+        }
+      }
+
+      for (let char in charMap) {
+        if (charMap[char] > max) {
+          max = charMap[char];
+          maxChar = char;
+        }
+      }
+
+      return maxChar;
     }
   }
 };
@@ -133,6 +190,7 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
+  text-transform: uppercase;
 }
 
 .list-letters p {
@@ -142,5 +200,9 @@ export default {
 }
 .letter-color {
   color: red;
+  text-transform: uppercase;
+}
+.uppercase-modal {
+  text-transform: uppercase;
 }
 </style>

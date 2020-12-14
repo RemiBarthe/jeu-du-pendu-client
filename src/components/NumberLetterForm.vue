@@ -40,7 +40,7 @@ export default {
     onSubmit() {
       let letters = [];
       for (let i = 1; i <= this.number; i++) {
-        letters.push({ position: i, value: " " });
+        letters.push({ position: i, value: "" });
       }
       this.$emit("submitted", letters);
     }
