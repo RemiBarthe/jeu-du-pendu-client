@@ -41,6 +41,30 @@
         </v-card>
       </v-dialog>
     </v-row>
+
+    <v-row justify="center">
+      <v-dialog v-model="modalVictory" width="600px">
+        <v-card>
+          <v-card-title class="justify-center"> Facile ! </v-card-title>
+          <h1 class="text-center uppercase-modal">
+            Ton mot : {{ findedWord }}
+          </h1>
+          <v-btn color="primary" @click="restart">Rejouer</v-btn>
+        </v-card>
+      </v-dialog>
+    </v-row>
+
+    <v-row justify="center">
+      <v-dialog v-model="modalDefeat" width="600px" persistent>
+        <v-card>
+          <v-card-title class="justify-center"> Oups..! </v-card-title>
+          <h1 class="text-center uppercase-modal">Je ne connais pas ton mot</h1>
+          <v-text-field placeholder="C'est quoi ton mot ?">TOTO</v-text-field>
+          <v-btn color="success">Ajouter le mot</v-btn>
+          <v-btn color="primary" @click="restart">Rejouer</v-btn>
+        </v-card>
+      </v-dialog>
+    </v-row>
   </v-container>
 </template>
 
@@ -52,11 +76,14 @@ export default {
 
   data: () => ({
     modalLetterChoose: false,
+    modalVictory: false,
+    modalDefeat: false,
     tittleWhereIsLetter: false,
     letterPossible: "",
     letters: "",
     positions: "",
-    askedLetter: []
+    askedLetter: [],
+    findedWord: ""
   }),
 
   props: ["word"],
@@ -126,10 +153,16 @@ export default {
             this.positions
         )
         .then((response) => {
-          if (response.data.length > 1) {
-            this.getPopularLetter(response.data);
+          if (response.data.length == 0) {
+            this.modalDefeat = true;
           } else {
-            console.log(response.data);
+            if (response.data.length > 1) {
+              this.getPopularLetter(response.data);
+            } else {
+              console.log(response.data);
+              this.findedWord = response.data[0].label;
+              this.modalVictory = true;
+            }
           }
         });
     },
@@ -167,6 +200,9 @@ export default {
       }
 
       return maxChar;
+    },
+    restart() {
+      this.$emit("submitted", null);
     }
   }
 };
