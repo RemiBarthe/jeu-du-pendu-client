@@ -13,7 +13,7 @@
         </v-btn>
       </div>
     </div>
-    <v-btn large color="success" class="ma-2" @click="onSubmit">
+    <v-btn x-large rounded color="success" class="ma-2" @click="onSubmit">
       Valider
     </v-btn>
   </v-container>
@@ -59,11 +59,13 @@ export default {
   align-items: center;
   flex-flow: column;
   height: 100vh;
+  color: white;
 }
 .position-number {
   display: flex;
   justify-content: center;
   align-items: center;
+  color: white;
 }
 
 .position-buttons {

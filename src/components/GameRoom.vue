@@ -1,11 +1,11 @@
 <template>
   <v-container>
-    <h1 v-if="tittleWhereIsLetter">
+    <h1 v-if="tittleWhereIsLetter" class="style-color-titre">
       Où se trouve la lettre
       <span class="letter-color">{{ letterPossible }}</span>
       dans votre mot ?
     </h1>
-    <transition-group name="slideDown" appear tag="div" class="list-letters">
+    <transition-group name="fadeLeft" appear tag="div" class="list-letters">
       <v-card
         @click="selectLetter(letter.position)"
         :class="{ red: !letter.value, blue: letter.value }"
@@ -21,8 +21,8 @@
       color="success"
       class="align-center"
       @click="confirmLetter"
-      >Valider</v-btn
-    >
+      >Valider
+    </v-btn>
     <v-row justify="center">
       <v-dialog v-model="modalLetterChoose" width="600px" persistent>
         <v-card>
@@ -47,9 +47,10 @@
         <v-card>
           <v-card-title class="justify-center"> Facile ! </v-card-title>
           <h1 class="text-center uppercase-modal">
-            Ton mot : {{ findedWord }}
+            Ton mot est {{ findedWord }} je l'ai trouvé en
+            {{ countGuess }} coups
           </h1>
-          <v-btn color="primary" @click="restart">Rejouer</v-btn>
+          <v-icon color="primary" @click="restart">mdi-restart</v-icon>
         </v-card>
       </v-dialog>
     </v-row>
@@ -61,7 +62,7 @@
           <h1 class="text-center uppercase-modal">Je ne connais pas ton mot</h1>
           <v-text-field placeholder="C'est quoi ton mot ?">TOTO</v-text-field>
           <v-btn color="success">Ajouter le mot</v-btn>
-          <v-btn color="primary" @click="restart">Rejouer</v-btn>
+          <v-icon color="primary" @click="restart">mdi-restart</v-icon>
         </v-card>
       </v-dialog>
     </v-row>
@@ -83,7 +84,8 @@ export default {
     letters: "",
     positions: "",
     askedLetter: [],
-    findedWord: ""
+    findedWord: "",
+    countGuess: 0
   }),
 
   props: ["word"],
@@ -158,6 +160,7 @@ export default {
           } else {
             if (response.data.length > 1) {
               this.getPopularLetter(response.data);
+              this.countGuess++;
             } else {
               console.log(response.data);
               this.findedWord = response.data[0].label;
@@ -209,6 +212,9 @@ export default {
 </script>
 
 <style scoped>
+.style-color-titre {
+  color: white;
+}
 .container {
   height: 100vh;
 }

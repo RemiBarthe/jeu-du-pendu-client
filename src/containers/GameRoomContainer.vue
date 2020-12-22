@@ -1,7 +1,7 @@
 <template>
   <div>
     <NumberLetterForm @submitted="isSubmit" v-if="!word" />
-    <GameRoom :word="word" v-else />
+    <GameRoom @submitted="isSubmit" :word="word" v-else />
   </div>
 </template>
 
