@@ -12,6 +12,7 @@
           dark
           color="#007CC7"
           class="ma-2"
+          elevation="0"
           @click="incrementNumber"
         >
           <v-icon dark> mdi-plus </v-icon>
@@ -22,6 +23,7 @@
           dark
           color="#203647"
           class="ma-2"
+          elevation="0"
           @click="decrementNumber"
         >
           <v-icon dark> mdi-minus </v-icon>

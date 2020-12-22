@@ -1,39 +1,49 @@
 <template>
-  <v-container>
-    <h1 v-if="tittleWhereIsLetter" class="style-color-titre">
-      Où se trouve la lettre
-      <span class="letter-color">{{ letterPossible }}</span>
-      dans votre mot ?
-    </h1>
-    <transition-group name="fadeLeft" appear tag="div" class="list-letters">
-      <v-card
-        @click="selectLetter(letter.position)"
-        :class="{ red: !letter.value, blue: letter.value }"
-        v-for="letter in word"
-        :key="letter.position"
-        outlined
-      >
-        {{ letter.value }}
-      </v-card>
-    </transition-group>
-    <v-btn
-      v-if="tittleWhereIsLetter"
-      color="success"
-      class="align-center"
-      @click="confirmLetter"
-      >Valider
-    </v-btn>
+  <div>
+    <v-container class="container-gameroom">
+      <h1 v-if="tittleWhereIsLetter" class="letter-title">
+        Où se trouve la lettre
+        <span class="letter-color">{{ letterPossible }}</span>
+        dans votre mot ?
+      </h1>
+
+      <transition-group name="fadeLeft" appear tag="div" class="list-letters">
+        <v-card
+          @click="selectLetter(letter.position)"
+          :class="{ empty: !letter.value }"
+          v-for="letter in word"
+          :key="letter.position"
+          dark
+          elevation="0"
+        >
+          {{ letter.value }}
+        </v-card>
+      </transition-group>
+
+      <v-btn
+        v-if="tittleWhereIsLetter"
+        color="#4DA8DA"
+        class="align-center"
+        @click="confirmLetter"
+        dark
+        elevation="0"
+        >Valider
+      </v-btn>
+    </v-container>
     <v-row justify="center">
       <v-dialog v-model="modalLetterChoose" width="600px" persistent>
         <v-card>
           <v-card-title class="justify-center">
             Cette lettre fait partie de votre mot ?
           </v-card-title>
+
           <h1 class="text-center uppercase-modal">{{ letterPossible }}</h1>
+
           <v-card-actions class="justify-center">
             <v-btn class="primary" rounded @click="modalValidateLetter">
               Oui
             </v-btn>
+
             <v-btn class="error" rounded @click="modalDeclineLetter">
               Non
             </v-btn>
@@ -46,10 +56,12 @@
       <v-dialog v-model="modalVictory" width="600px">
         <v-card>
           <v-card-title class="justify-center"> Facile ! </v-card-title>
+
           <h1 class="text-center uppercase-modal">
             Ton mot est {{ findedWord }} je l'ai trouvé en
             {{ countGuess }} coups
           </h1>
+
           <v-icon color="primary" @click="restart">mdi-restart</v-icon>
         </v-card>
       </v-dialog>
@@ -59,14 +71,18 @@
       <v-dialog v-model="modalDefeat" width="600px" persistent>
         <v-card>
           <v-card-title class="justify-center"> Oups..! </v-card-title>
+
           <h1 class="text-center uppercase-modal">Je ne connais pas ton mot</h1>
+
           <v-text-field placeholder="C'est quoi ton mot ?">TOTO</v-text-field>
+
           <v-btn color="success">Ajouter le mot</v-btn>
+
           <v-icon color="primary" @click="restart">mdi-restart</v-icon>
         </v-card>
       </v-dialog>
     </v-row>
-  </v-container>
+  </div>
 </template>
 
 
@@ -212,19 +228,28 @@ export default {
 </script>
 
 <style scoped>
-.style-color-titre {
+.container-gameroom {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-flow: column;
+}
+
+.letter-title {
   color: white;
+  text-align: center;
 }
 .container {
   height: 100vh;
 }
 
 .list-letters {
-  height: 80%;
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 20px 0;
 }
+
 .list-letters .v-card {
   margin: 5px;
   width: 80px;
@@ -233,6 +258,11 @@ export default {
   align-items: center;
   justify-content: center;
   text-transform: uppercase;
+  background-color: #007cc7;
+}
+
+.list-letters .v-card.empty {
+  background-color: #203647;
 }
 
 .list-letters p {
@@ -241,7 +271,7 @@ export default {
   margin: 0;
 }
 .letter-color {
-  color: red;
+  color: #4da8da;
   text-transform: uppercase;
 }
 .uppercase-modal {
