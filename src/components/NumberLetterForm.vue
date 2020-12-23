@@ -1,7 +1,7 @@
 <template>
   <v-container class="center-container">
     <h1 class="font-weight-black">LE JEU DU PENDU</h1>
-    <h2 class="subtitle-1">Combien de lettres dans ton mot ? (2-21)</h2>
+    <h2 class="subtitle-1">Combien de lettres dans ton mot ? (4-21)</h2>
     <div class="position-number">
       <p class="size-number">{{ number }}</p>
 
@@ -40,7 +40,7 @@ export default {
   name: "NumberLetterForm",
 
   data: () => ({
-    number: 2
+    number: 4
   }),
 
   methods: {
@@ -50,7 +50,7 @@ export default {
       }
     },
     decrementNumber() {
-      if (this.number > 2) {
+      if (this.number > 4) {
         this.number--;
       }
     },
