@@ -188,7 +188,9 @@ export default {
       if (this.word[position - 1].value === this.letterPossible) {
         this.word[position - 1].value = "";
       } else {
-        this.word[position - 1].value = this.letterPossible;
+        if (!this.word[position - 1].value) {
+          this.word[position - 1].value = this.letterPossible;
+        }
       }
     },
     noLettersPosition() {
