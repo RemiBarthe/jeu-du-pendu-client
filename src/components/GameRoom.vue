@@ -32,20 +32,36 @@
     </v-container>
     <v-row justify="center">
       <v-dialog v-model="modalLetterChoose" width="600px" persistent>
-        <v-card>
+        <v-card class="pa-8">
           <v-card-title class="justify-center">
             Cette lettre fait partie de votre mot ?
           </v-card-title>
 
-          <h1 class="text-center uppercase-modal">{{ letterPossible }}</h1>
+          <h1 class="text-center uppercase-modal ma-3">
+            {{ letterPossible }}
+          </h1>
 
           <v-card-actions class="justify-center">
-            <v-btn class="primary" rounded @click="modalValidateLetter">
-              Oui
+            <v-btn
+              color="#4DA8DA"
+              fab
+              small
+              @click="modalValidateLetter"
+              elevation="0"
+              dark
+            >
+              <v-icon dark> mdi-check </v-icon>
             </v-btn>
 
-            <v-btn class="error" rounded @click="modalDeclineLetter">
-              Non
+            <v-btn
+              color="#203647"
+              fab
+              small
+              dark
+              @click="modalDeclineLetter"
+              elevation="0"
+            >
+              <v-icon dark> mdi-close </v-icon>
             </v-btn>
           </v-card-actions>
         </v-card>
@@ -53,32 +69,70 @@
     </v-row>
 
     <v-row justify="center">
-      <v-dialog v-model="modalVictory" width="600px">
-        <v-card>
+      <v-dialog v-model="modalVictory" width="600px" persistent>
+        <v-card class="pa-8">
           <v-card-title class="justify-center"> Facile ! </v-card-title>
 
           <h1 class="text-center uppercase-modal">
-            Ton mot est {{ findedWord }} je l'ai trouvé en
-            {{ countGuess }} coups
+            Ton mot est <span class="letter-color">{{ findedWord }}</span>
           </h1>
 
-          <v-icon color="primary" @click="restart">mdi-restart</v-icon>
+          <v-card-title class="justify-center">
+            Je l'ai trouvé en {{ countGuess }} coups
+          </v-card-title>
+
+          <v-card-actions class="justify-center">
+            <v-tooltip right open-delay="500">
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn
+                  @click="restart"
+                  v-bind="attrs"
+                  v-on="on"
+                  text
+                  dark
+                  color="#4DA8DA"
+                >
+                  <v-icon>mdi-restart</v-icon>
+                </v-btn>
+              </template>
+              <span>Rejouer</span>
+            </v-tooltip>
+          </v-card-actions>
         </v-card>
       </v-dialog>
     </v-row>
 
     <v-row justify="center">
       <v-dialog v-model="modalDefeat" width="600px" persistent>
-        <v-card>
+        <v-card class="pa-8">
           <v-card-title class="justify-center"> Oups..! </v-card-title>
 
           <h1 class="text-center uppercase-modal">Je ne connais pas ton mot</h1>
 
-          <v-text-field placeholder="C'est quoi ton mot ?">TOTO</v-text-field>
+          <v-text-field placeholder="Quel est ton mot ?"></v-text-field>
 
-          <v-btn color="success">Ajouter le mot</v-btn>
+          <v-card-actions class="justify-center">
+            <v-btn color="#4DA8DA" dark elevation="0" class="ma-1"
+              >Ajouter le mot</v-btn
+            >
 
-          <v-icon color="primary" @click="restart">mdi-restart</v-icon>
+            <v-tooltip right open-delay="500">
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn
+                  @click="restart"
+                  v-bind="attrs"
+                  v-on="on"
+                  dark
+                  color="#203647"
+                  elevation="0"
+                  class="ma-1"
+                >
+                  <v-icon>mdi-restart</v-icon>
+                </v-btn>
+              </template>
+              <span>Rejouer</span>
+            </v-tooltip>
+          </v-card-actions>
         </v-card>
       </v-dialog>
     </v-row>
@@ -271,7 +325,7 @@ export default {
   margin: 0;
 }
 .letter-color {
-  color: #4da8da;
+  color: #007cc7;
   text-transform: uppercase;
 }
 .uppercase-modal {
