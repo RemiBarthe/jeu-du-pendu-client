@@ -131,6 +131,7 @@ export default {
       }
     },
     addToLettersPositions() {
+      let count = 0;
       this.word.forEach((letter) => {
         if (letter.value === this.letterPossible) {
           if (this.letters == "") {
@@ -140,8 +141,18 @@ export default {
             this.letters += "," + this.letterPossible;
             this.positions += "," + letter.position;
           }
+          count++;
         }
       });
+      if (!count) {
+        if (this.letters == "") {
+          this.letters += this.letterPossible;
+          this.positions += 0;
+        } else {
+          this.letters += "," + this.letterPossible;
+          this.positions += "," + 0;
+        }
+      }
     },
     getWords() {
       this.addToLettersPositions();
