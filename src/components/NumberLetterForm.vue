@@ -1,19 +1,36 @@
 <template>
   <v-container class="center-container">
-    <p class="style-title">Combien de lettres dans le mot ? (2-21)</p>
+    <h1 class="font-weight-black">LE JEU DU PENDU</h1>
+    <h2 class="subtitle-1">Combien de lettres dans ton mot ? (4-21)</h2>
     <div class="position-number">
       <p class="size-number">{{ number }}</p>
 
       <div class="position-buttons">
-        <v-btn x-small fab color="info" class="ma-2" @click="incrementNumber">
+        <v-btn
+          x-small
+          fab
+          dark
+          color="#007CC7"
+          class="ma-2"
+          elevation="0"
+          @click="incrementNumber"
+        >
           <v-icon dark> mdi-plus </v-icon>
         </v-btn>
-        <v-btn x-small fab color="error" class="ma-2" @click="decrementNumber">
+        <v-btn
+          x-small
+          fab
+          dark
+          color="#203647"
+          class="ma-2"
+          elevation="0"
+          @click="decrementNumber"
+        >
           <v-icon dark> mdi-minus </v-icon>
         </v-btn>
       </div>
     </div>
-    <v-btn x-large rounded color="success" class="ma-2" @click="onSubmit">
+    <v-btn x-large rounded dark color="#4DA8DA" class="ma-2" @click="onSubmit">
       Valider
     </v-btn>
   </v-container>
@@ -23,7 +40,7 @@ export default {
   name: "NumberLetterForm",
 
   data: () => ({
-    number: 2
+    number: 4
   }),
 
   methods: {
@@ -33,7 +50,7 @@ export default {
       }
     },
     decrementNumber() {
-      if (this.number > 2) {
+      if (this.number > 4) {
         this.number--;
       }
     },
