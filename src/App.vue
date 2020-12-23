@@ -68,14 +68,14 @@ export default {
 .app-background .liquid::before {
   border-radius: 45%;
   background: rgba(18, 35, 46, 1);
-  animation: animate 20s linear infinite;
+  animation: animate 50s linear infinite;
   z-index: 1;
 }
 
 .app-background .liquid::after {
   border-radius: 40%;
   background: rgba(18, 35, 46, 0.5);
-  animation: animate 40s linear infinite;
+  animation: animate 100s linear infinite;
   z-index: 1;
 }
 
