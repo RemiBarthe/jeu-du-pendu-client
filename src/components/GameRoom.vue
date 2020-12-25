@@ -204,7 +204,7 @@ export default {
     },
     addToLettersPositions() {
       let count = 0;
-      this.word.forEach((letter) => {
+      this.word.forEach(letter => {
         if (letter.value === this.letterPossible) {
           if (this.letters == "") {
             this.letters += this.letterPossible;
@@ -230,14 +230,14 @@ export default {
       this.addToLettersPositions();
       axios
         .get(
-          "https://whispering-refuge-98843.herokuapp.com/words?length=" +
+          "http://jeudupenduapi-env.eba-jkmp4qhj.eu-west-3.elasticbeanstalk.com/words?length=" +
             this.word.length +
             "&letters=" +
             this.letters +
             "&positions=" +
             this.positions
         )
-        .then((response) => {
+        .then(response => {
           if (response.data.length == 0) {
             this.modalDefeat = true;
           } else {
@@ -255,11 +255,11 @@ export default {
     getPopularLetter(response) {
       let allWord = "";
 
-      response.forEach((word) => {
+      response.forEach(word => {
         allWord += word.label;
       });
 
-      this.askedLetter.forEach((letter) => {
+      this.askedLetter.forEach(letter => {
         allWord = allWord.split(letter).join("");
       });
 
