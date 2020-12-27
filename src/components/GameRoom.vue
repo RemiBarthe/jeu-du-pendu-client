@@ -311,7 +311,19 @@ export default {
       this.$emit("submitted", null);
     },
     addNewWord() {
-      console.log(this.formattedNewWord);
+      axios
+        .get(
+          "http://jeudupenduapi-env.eba-jkmp4qhj.eu-west-3.elasticbeanstalk.com/words/" +
+            this.formattedNewWord
+        )
+        .then(response => {
+          if (!response.data.length) {
+            axios.post(
+              "http://jeudupenduapi-env.eba-jkmp4qhj.eu-west-3.elasticbeanstalk.com/words?label=" +
+                this.formattedNewWord
+            );
+          }
+        });
     }
   }
 };
