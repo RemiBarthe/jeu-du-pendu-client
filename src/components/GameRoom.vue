@@ -109,10 +109,25 @@
 
           <h1 class="text-center uppercase-modal">Je ne connais pas ton mot</h1>
 
-          <v-text-field placeholder="Quel est ton mot ?"></v-text-field>
+          <v-text-field
+            v-model="newWord"
+            :rules="[
+              () =>
+                newWord.length >= word.length ||
+                'Votre mot doit faire ' + word.length + ' lettres'
+            ]"
+            placeholder="Quel est ton mot ?"
+            counter
+            :maxlength="word.length"
+          ></v-text-field>
 
           <v-card-actions class="justify-center">
-            <v-btn color="#4DA8DA" dark elevation="0" class="ma-1"
+            <v-btn
+              @click="addNewWord"
+              :disabled="this.newWord.length !== this.word.length"
+              color="#4DA8DA"
+              elevation="0"
+              class="ma-1 white--text"
               >Ajouter le mot</v-btn
             >
 
@@ -144,7 +159,7 @@
 import axios from "axios";
 export default {
   name: "GameRoom",
-
+  props: ["word"],
   data: () => ({
     modalLetterChoose: false,
     modalVictory: false,
@@ -155,17 +170,14 @@ export default {
     positions: "",
     askedLetter: [],
     findedWord: "",
-    countGuess: 0
+    countGuess: 0,
+    newWord: ""
   }),
-
-  props: ["word"],
-
   created() {
     setTimeout(() => {
       this.askLetter("e");
     }, 1200);
   },
-
   methods: {
     modalValidateLetter() {
       this.modalLetterChoose = false;
@@ -245,7 +257,6 @@ export default {
               this.getPopularLetter(response.data);
               this.countGuess++;
             } else {
-              console.log(response.data);
               this.findedWord = response.data[0].label;
               this.modalVictory = true;
             }
@@ -289,6 +300,9 @@ export default {
     },
     restart() {
       this.$emit("submitted", null);
+    },
+    addNewWord() {
+      console.log(this.newWord);
     }
   }
 };
@@ -301,7 +315,6 @@ export default {
   align-items: center;
   flex-flow: column;
 }
-
 .letter-title {
   color: white;
   text-align: center;
@@ -309,14 +322,12 @@ export default {
 .container {
   height: 100vh;
 }
-
 .list-letters {
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 20px 0;
 }
-
 .list-letters .v-card {
   margin: 5px;
   width: 80px;
@@ -328,11 +339,9 @@ export default {
   background-color: #eda134;
   font-size: 25px;
 }
-
 .list-letters .v-card.empty {
   background-color: #203647;
 }
-
 .list-letters p {
   font-size: 50px;
   text-align: center;
