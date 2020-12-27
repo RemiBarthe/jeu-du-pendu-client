@@ -113,7 +113,7 @@
             v-model="newWord"
             :rules="[
               () =>
-                newWord.length >= word.length ||
+                formattedNewWord.length >= word.length ||
                 'Votre mot doit faire ' + word.length + ' lettres'
             ]"
             placeholder="Quel est ton mot ?"
@@ -124,7 +124,7 @@
           <v-card-actions class="justify-center">
             <v-btn
               @click="addNewWord"
-              :disabled="this.newWord.length !== this.word.length"
+              :disabled="this.formattedNewWord.length !== this.word.length"
               color="#4DA8DA"
               elevation="0"
               class="ma-1 white--text"
@@ -177,6 +177,15 @@ export default {
     setTimeout(() => {
       this.askLetter("e");
     }, 1200);
+  },
+  computed: {
+    formattedNewWord() {
+      return this.newWord
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/[^\w\s]/gi, "");
+    }
   },
   methods: {
     modalValidateLetter() {
@@ -302,7 +311,7 @@ export default {
       this.$emit("submitted", null);
     },
     addNewWord() {
-      console.log(this.newWord);
+      console.log(this.formattedNewWord);
     }
   }
 };
