@@ -1,12 +1,15 @@
 <template>
   <div>
+    <h1 class="letter-title">
+      Nombre de vie de l'ordinateur :
+      <span class="letter-color"> {{ score }} </span>
+    </h1>
     <v-container class="container-gameroom">
       <h1 v-if="tittleWhereIsLetter" class="letter-title">
         Où se trouve la lettre
         <span class="letter-color">{{ letterPossible }}</span>
         dans votre mot ?
       </h1>
-      <h1>Scrore de l'ordinateur : {{ score }}</h1>
       <transition-group name="fadeLeft" appear tag="div" class="list-letters">
         <v-card
           @click="selectLetter(letter.position)"
@@ -69,56 +72,12 @@
     </v-row>
 
     <v-row justify="center">
-      <v-dialog v-model="modalVictory" width="600px" persistent>
-        <v-card class="pa-8">
-          <v-card-title class="justify-center"> Facile ! </v-card-title>
-
-          <h1 class="text-center uppercase-modal">
-            Ton mot est <span class="letter-color">{{ findedWord }}</span>
-          </h1>
-          <v-card-title class="justify-center">
-            Je l'ai trouvé en {{ countGuess }} coups
-          </v-card-title>
-
-          <v-card-actions class="justify-center">
-            <v-tooltip right open-delay="500">
-              <template v-slot:activator="{ on, attrs }">
-                <v-btn
-                  @click="restart"
-                  v-bind="attrs"
-                  v-on="on"
-                  text
-                  dark
-                  color="#4DA8DA"
-                >
-                  <v-icon>mdi-restart</v-icon>
-                </v-btn>
-              </template>
-              <span>Rejouer</span>
-            </v-tooltip>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
-    </v-row>
-
-    <v-row justify="center">
       <v-dialog v-model="modalDefeat" width="600px" persistent>
         <v-card class="pa-8">
-          <div v-if="!computerLose">
-            <v-card-title class="justify-center"> Oups..! </v-card-title>
-
-            <h1 class="text-center uppercase-modal">
-              Je ne connais pas ton mot
-            </h1>
-          </div>
-
-          <div v-else>
-            <v-card-title class="justify-center"> Oups..! </v-card-title>
-            <h1 class="text-center">
-              Je n'ai pas pu trouver ton mot en moins de
-              {{ score }} coups
-            </h1>
-          </div>
+          <v-card-title class="justify-center"> Oups..! </v-card-title>
+          <h1 class="text-center">
+            {{ looseMessage }}
+          </h1>
 
           <v-text-field
             v-model="newWord"
@@ -166,7 +125,9 @@
     <v-row justify="center">
       <v-dialog v-model="modalVictory" width="600px" persistent>
         <v-card class="pa-8">
-          <v-card-title class="justify-center"> Facile ! </v-card-title>
+          <v-card-title class="justify-center">
+            {{ victoryMessage }}
+          </v-card-title>
 
           <h1 class="text-center uppercase-modal">
             Ton mot est <span class="letter-color">{{ findedWord }}</span>
@@ -255,7 +216,7 @@ export default {
     positions: "",
     askedLetter: [],
     findedWord: "",
-    score: 0,
+    score: 3,
     computerLose: false,
     countGuess: 1,
     newWord: ""
@@ -272,25 +233,31 @@ export default {
         .normalize("NFD")
         .replace(/[\u0300-\u036f]/g, "")
         .replace(/[^\w\s]/gi, "");
+    },
+    looseMessage() {
+      if (this.score === 0) {
+        return "Incroyable tu as réussis à me battre, aide moi à en apprendre plus";
+      }
+      return "Je ne connais pas ton mot";
+    },
+    victoryMessage() {
+      switch (this.score) {
+        case 3:
+          return "PERFECT GAME !!!";
+        case 2:
+          return "Victoire !";
+        case 1:
+          return "Oulà, j'ai eut chaud !";
+      }
+      return 0;
     }
   },
   methods: {
-    scoreUpdate() {
-      if (this.score >= 6) {
-        this.computerLose = true;
-        this.modalDefeat = true;
-      } else {
-        this.score++;
-      }
-    },
     modalValidateLetter() {
       this.modalLetterChoose = false;
       this.tittleWhereIsLetter = true;
     },
     modalDeclineLetter() {
-      //est ce que cette fonction n'est pas un doublon ??
-      //this.noLettersPosition();
-      //this.scoreUpdate();
       this.getWords();
     },
     confirmLetter() {
@@ -311,15 +278,6 @@ export default {
         }
       }
     },
-    noLettersPosition() {
-      if (this.letters == "") {
-        this.letters += this.letterPossible;
-        this.positions += 0;
-      } else {
-        this.letters += "," + this.letterPossible;
-        this.positions += "," + 0;
-      }
-    },
     addToLettersPositions() {
       let count = 0;
       this.word.forEach((letter) => {
@@ -335,7 +293,7 @@ export default {
         }
       });
       if (!count) {
-        this.scoreUpdate();
+        this.score--;
         if (this.letters == "") {
           this.letters += this.letterPossible;
           this.positions += 0;
@@ -357,7 +315,7 @@ export default {
             this.positions
         )
         .then((response) => {
-          if (response.data.length == 0) {
+          if (response.data.length === 0 || this.score <= 0) {
             this.modalDefeat = true;
           } else {
             if (response.data.length > 1) {
@@ -406,9 +364,7 @@ export default {
       return maxChar;
     },
     restart() {
-      //A voir si c'est bien comme ça
       this.computerLose = false;
-
       this.$emit("submitted", null);
     },
     addNewWord() {
