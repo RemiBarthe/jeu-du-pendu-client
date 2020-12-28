@@ -76,7 +76,6 @@
           <h1 class="text-center uppercase-modal">
             Ton mot est <span class="letter-color">{{ findedWord }}</span>
           </h1>
-
           <v-card-title class="justify-center">
             Je l'ai trouvé en {{ countGuess }} coups
           </v-card-title>
@@ -121,13 +120,101 @@
             </h1>
           </div>
 
-          <v-text-field placeholder="Quel est ton mot ?"></v-text-field>
+          <v-text-field
+            v-model="newWord"
+            :rules="[
+              () =>
+                formattedNewWord.length >= word.length ||
+                'Votre mot doit faire ' + word.length + ' lettres'
+            ]"
+            placeholder="Quel est ton mot ?"
+            counter
+            :maxlength="word.length"
+          ></v-text-field>
 
           <v-card-actions class="justify-center">
-            <v-btn color="#4DA8DA" dark elevation="0" class="ma-1"
+            <v-btn
+              @click="addNewWord"
+              :disabled="this.formattedNewWord.length !== this.word.length"
+              color="#4DA8DA"
+              elevation="0"
+              class="ma-1 white--text"
               >Ajouter le mot</v-btn
             >
 
+            <v-tooltip right open-delay="500">
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn
+                  @click="restart"
+                  v-bind="attrs"
+                  v-on="on"
+                  dark
+                  color="#203647"
+                  elevation="0"
+                  class="ma-1"
+                >
+                  <v-icon>mdi-restart</v-icon>
+                </v-btn>
+              </template>
+              <span>Rejouer</span>
+            </v-tooltip>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+    </v-row>
+
+    <v-row justify="center">
+      <v-dialog v-model="modalVictory" width="600px" persistent>
+        <v-card class="pa-8">
+          <v-card-title class="justify-center"> Facile ! </v-card-title>
+
+          <h1 class="text-center uppercase-modal">
+            Ton mot est <span class="letter-color">{{ findedWord }}</span>
+          </h1>
+
+          <v-card-title class="justify-center">
+            Je l'ai trouvé en {{ countGuess }} coups
+          </v-card-title>
+
+          <v-card-actions class="justify-center">
+            <v-btn
+              @click="wrongWord"
+              color="error"
+              elevation="0"
+              class="ma-1 white--text"
+              >C'EST FAUX !</v-btn
+            >
+            <v-tooltip right open-delay="500">
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn
+                  @click="restart"
+                  v-bind="attrs"
+                  v-on="on"
+                  dark
+                  color="#203647"
+                  elevation="0"
+                  class="ma-1"
+                >
+                  <v-icon>mdi-restart</v-icon>
+                </v-btn>
+              </template>
+              <span>Rejouer</span>
+            </v-tooltip>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+    </v-row>
+
+    <v-row justify="center">
+      <v-dialog v-model="modalSubmittedWord" width="600px" persistent>
+        <v-card class="pa-8">
+          <v-card-title class="justify-center">
+            Votre mot sera ajouté prochainement
+          </v-card-title>
+
+          <h1 class="text-center uppercase-modal">Merci !</h1>
+
+          <v-card-actions class="justify-center">
             <v-tooltip right open-delay="500">
               <template v-slot:activator="{ on, attrs }">
                 <v-btn
@@ -156,36 +243,37 @@
 import axios from "axios";
 export default {
   name: "GameRoom",
-
+  props: ["word"],
   data: () => ({
     modalLetterChoose: false,
     modalVictory: false,
     modalDefeat: false,
+    modalSubmittedWord: false,
     tittleWhereIsLetter: false,
     letterPossible: "",
     letters: "",
     positions: "",
     askedLetter: [],
     findedWord: "",
-    countGuess: 0,
     score: 0,
-    computerLose: false
+    computerLose: false,
+    countGuess: 1,
+    newWord: ""
   }),
-
-  props: ["word"],
-
   created() {
     setTimeout(() => {
       this.askLetter("e");
     }, 1200);
   },
-  /*watch: {
-    score: function () {
-      if (this.score >= 2) {
-        console.log("perdu LOOOOL");
-      }
+  computed: {
+    formattedNewWord() {
+      return this.newWord
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/[^\w\s]/gi, "");
     }
-  },*/
+  },
   methods: {
     scoreUpdate() {
       if (this.score >= 6) {
@@ -261,7 +349,7 @@ export default {
       this.addToLettersPositions();
       axios
         .get(
-          "https://whispering-refuge-98843.herokuapp.com/words?length=" +
+          "http://jeudupenduapi-env.eba-jkmp4qhj.eu-west-3.elasticbeanstalk.com/words?length=" +
             this.word.length +
             "&letters=" +
             this.letters +
@@ -276,7 +364,6 @@ export default {
               this.getPopularLetter(response.data);
               this.countGuess++;
             } else {
-              console.log(response.data);
               this.findedWord = response.data[0].label;
               this.modalVictory = true;
             }
@@ -323,6 +410,28 @@ export default {
       this.computerLose = false;
 
       this.$emit("submitted", null);
+    },
+    addNewWord() {
+      axios
+        .get(
+          "http://jeudupenduapi-env.eba-jkmp4qhj.eu-west-3.elasticbeanstalk.com/words/" +
+            this.formattedNewWord
+        )
+        .then((response) => {
+          if (!response.data.length) {
+            axios.post(
+              "http://jeudupenduapi-env.eba-jkmp4qhj.eu-west-3.elasticbeanstalk.com/words?label=" +
+                this.formattedNewWord
+            );
+          }
+          this.modalDefeat = false;
+          this.modalLetterChoose = false;
+          this.modalSubmittedWord = true;
+        });
+    },
+    wrongWord() {
+      this.modalVictory = false;
+      this.modalDefeat = true;
     }
   }
 };
@@ -335,7 +444,6 @@ export default {
   align-items: center;
   flex-flow: column;
 }
-
 .letter-title {
   color: white;
   text-align: center;
@@ -343,14 +451,12 @@ export default {
 .container {
   height: 100vh;
 }
-
 .list-letters {
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 20px 0;
 }
-
 .list-letters .v-card {
   margin: 5px;
   width: 80px;
@@ -362,11 +468,9 @@ export default {
   background-color: #eda134;
   font-size: 25px;
 }
-
 .list-letters .v-card.empty {
   background-color: #203647;
 }
-
 .list-letters p {
   font-size: 50px;
   text-align: center;
