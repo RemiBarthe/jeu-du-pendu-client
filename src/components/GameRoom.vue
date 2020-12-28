@@ -6,7 +6,7 @@
         <span class="letter-color">{{ letterPossible }}</span>
         dans votre mot ?
       </h1>
-
+      <h1>Scrore de l'ordinateur : {{ score }}</h1>
       <transition-group name="fadeLeft" appear tag="div" class="list-letters">
         <v-card
           @click="selectLetter(letter.position)"
@@ -105,9 +105,21 @@
     <v-row justify="center">
       <v-dialog v-model="modalDefeat" width="600px" persistent>
         <v-card class="pa-8">
-          <v-card-title class="justify-center"> Oups..! </v-card-title>
+          <div v-if="!computerLose">
+            <v-card-title class="justify-center"> Oups..! </v-card-title>
 
-          <h1 class="text-center uppercase-modal">Je ne connais pas ton mot</h1>
+            <h1 class="text-center uppercase-modal">
+              Je ne connais pas ton mot
+            </h1>
+          </div>
+
+          <div v-else>
+            <v-card-title class="justify-center"> Oups..! </v-card-title>
+            <h1 class="text-center">
+              Je n'ai pas pu trouver ton mot en moins de
+              {{ score }} coups
+            </h1>
+          </div>
 
           <v-text-field placeholder="Quel est ton mot ?"></v-text-field>
 
@@ -155,7 +167,9 @@ export default {
     positions: "",
     askedLetter: [],
     findedWord: "",
-    countGuess: 0
+    countGuess: 0,
+    score: 0,
+    computerLose: false
   }),
 
   props: ["word"],
@@ -165,14 +179,30 @@ export default {
       this.askLetter("e");
     }, 1200);
   },
-
+  /*watch: {
+    score: function () {
+      if (this.score >= 2) {
+        console.log("perdu LOOOOL");
+      }
+    }
+  },*/
   methods: {
+    scoreUpdate() {
+      if (this.score >= 6) {
+        this.computerLose = true;
+        this.modalDefeat = true;
+      } else {
+        this.score++;
+      }
+    },
     modalValidateLetter() {
       this.modalLetterChoose = false;
       this.tittleWhereIsLetter = true;
     },
     modalDeclineLetter() {
-      this.noLettersPosition();
+      //est ce que cette fonction n'est pas un doublon ??
+      //this.noLettersPosition();
+      //this.scoreUpdate();
       this.getWords();
     },
     confirmLetter() {
@@ -217,6 +247,7 @@ export default {
         }
       });
       if (!count) {
+        this.scoreUpdate();
         if (this.letters == "") {
           this.letters += this.letterPossible;
           this.positions += 0;
@@ -288,6 +319,9 @@ export default {
       return maxChar;
     },
     restart() {
+      //A voir si c'est bien comme ça
+      this.computerLose = false;
+
       this.$emit("submitted", null);
     }
   }
