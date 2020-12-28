@@ -76,7 +76,6 @@
           <h1 class="text-center uppercase-modal">
             Ton mot est <span class="letter-color">{{ findedWord }}</span>
           </h1>
-
           <v-card-title class="justify-center">
             Je l'ai trouvé en {{ countGuess }} coups
           </v-card-title>
@@ -166,15 +165,23 @@
           </v-card-title>
 
           <v-card-actions class="justify-center">
+            <v-btn
+              @click="wrongWord"
+              color="error"
+              elevation="0"
+              class="ma-1 white--text"
+              >C'EST FAUX !</v-btn
+            >
             <v-tooltip right open-delay="500">
               <template v-slot:activator="{ on, attrs }">
                 <v-btn
                   @click="restart"
                   v-bind="attrs"
                   v-on="on"
-                  text
                   dark
-                  color="#4DA8DA"
+                  color="#203647"
+                  elevation="0"
+                  class="ma-1"
                 >
                   <v-icon>mdi-restart</v-icon>
                 </v-btn>
@@ -193,9 +200,7 @@
             Votre mot sera ajouté prochainement
           </v-card-title>
 
-          <h1 class="text-center uppercase-modal">
-            Merci !
-          </h1>
+          <h1 class="text-center uppercase-modal">Merci !</h1>
 
           <v-card-actions class="justify-center">
             <v-tooltip right open-delay="500">
@@ -238,7 +243,7 @@ export default {
     positions: "",
     askedLetter: [],
     findedWord: "",
-    countGuess: 0,
+    countGuess: 1,
     newWord: ""
   }),
   created() {
@@ -293,7 +298,7 @@ export default {
     },
     addToLettersPositions() {
       let count = 0;
-      this.word.forEach(letter => {
+      this.word.forEach((letter) => {
         if (letter.value === this.letterPossible) {
           if (this.letters == "") {
             this.letters += this.letterPossible;
@@ -326,7 +331,7 @@ export default {
             "&positions=" +
             this.positions
         )
-        .then(response => {
+        .then((response) => {
           if (response.data.length == 0) {
             this.modalDefeat = true;
           } else {
@@ -343,11 +348,11 @@ export default {
     getPopularLetter(response) {
       let allWord = "";
 
-      response.forEach(word => {
+      response.forEach((word) => {
         allWord += word.label;
       });
 
-      this.askedLetter.forEach(letter => {
+      this.askedLetter.forEach((letter) => {
         allWord = allWord.split(letter).join("");
       });
 
@@ -384,7 +389,7 @@ export default {
           "http://jeudupenduapi-env.eba-jkmp4qhj.eu-west-3.elasticbeanstalk.com/words/" +
             this.formattedNewWord
         )
-        .then(response => {
+        .then((response) => {
           if (!response.data.length) {
             axios.post(
               "http://jeudupenduapi-env.eba-jkmp4qhj.eu-west-3.elasticbeanstalk.com/words?label=" +
@@ -392,8 +397,13 @@ export default {
             );
           }
           this.modalDefeat = false;
+          this.modalLetterChoose = false;
           this.modalSubmittedWord = true;
         });
+    },
+    wrongWord() {
+      this.modalVictory = false;
+      this.modalDefeat = true;
     }
   }
 };
