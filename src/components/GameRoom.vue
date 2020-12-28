@@ -217,7 +217,6 @@ export default {
     askedLetter: [],
     findedWord: "",
     score: 3,
-    computerLose: false,
     countGuess: 1,
     newWord: ""
   }),
@@ -364,7 +363,6 @@ export default {
       return maxChar;
     },
     restart() {
-      this.computerLose = false;
       this.$emit("submitted", null);
     },
     addNewWord() {
