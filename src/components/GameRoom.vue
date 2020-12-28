@@ -151,6 +151,73 @@
         </v-card>
       </v-dialog>
     </v-row>
+
+    <v-row justify="center">
+      <v-dialog v-model="modalVictory" width="600px" persistent>
+        <v-card class="pa-8">
+          <v-card-title class="justify-center"> Facile ! </v-card-title>
+
+          <h1 class="text-center uppercase-modal">
+            Ton mot est <span class="letter-color">{{ findedWord }}</span>
+          </h1>
+
+          <v-card-title class="justify-center">
+            Je l'ai trouvé en {{ countGuess }} coups
+          </v-card-title>
+
+          <v-card-actions class="justify-center">
+            <v-tooltip right open-delay="500">
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn
+                  @click="restart"
+                  v-bind="attrs"
+                  v-on="on"
+                  text
+                  dark
+                  color="#4DA8DA"
+                >
+                  <v-icon>mdi-restart</v-icon>
+                </v-btn>
+              </template>
+              <span>Rejouer</span>
+            </v-tooltip>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+    </v-row>
+
+    <v-row justify="center">
+      <v-dialog v-model="modalSubmittedWord" width="600px" persistent>
+        <v-card class="pa-8">
+          <v-card-title class="justify-center">
+            Votre mot sera ajouté prochainement
+          </v-card-title>
+
+          <h1 class="text-center uppercase-modal">
+            Merci !
+          </h1>
+
+          <v-card-actions class="justify-center">
+            <v-tooltip right open-delay="500">
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn
+                  @click="restart"
+                  v-bind="attrs"
+                  v-on="on"
+                  dark
+                  color="#203647"
+                  elevation="0"
+                  class="ma-1"
+                >
+                  <v-icon>mdi-restart</v-icon>
+                </v-btn>
+              </template>
+              <span>Rejouer</span>
+            </v-tooltip>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+    </v-row>
   </div>
 </template>
 
@@ -164,6 +231,7 @@ export default {
     modalLetterChoose: false,
     modalVictory: false,
     modalDefeat: false,
+    modalSubmittedWord: false,
     tittleWhereIsLetter: false,
     letterPossible: "",
     letters: "",
@@ -323,6 +391,8 @@ export default {
                 this.formattedNewWord
             );
           }
+          this.modalDefeat = false;
+          this.modalSubmittedWord = true;
         });
     }
   }
