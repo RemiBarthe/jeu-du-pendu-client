@@ -66,7 +66,6 @@ export default {
 
 .app-background .animate {
   top: -150%;
-  z-index: 99;
 }
 
 .app-background .liquid::after,
