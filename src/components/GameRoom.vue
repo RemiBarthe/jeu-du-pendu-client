@@ -1,10 +1,32 @@
 <template>
   <div>
-    <h1 class="letter-title">
-      Nombre de vie de l'ordinateur :
-      <span class="letter-color"> {{ score }} </span>
-    </h1>
     <v-container class="container-gameroom">
+      <div class="life-container">
+        <h3 class="letter-title">
+          Nombre de vie de l'ordinateur
+        </h3>
+
+        <div class="life">
+          <v-icon
+            v-for="(lifeLeft, index) in life"
+            :key="index"
+            color="#007cc7"
+            class="ma-1"
+          >
+            mdi-heart
+          </v-icon>
+
+          <v-icon
+            v-for="(life, index) in lifeMissing"
+            :key="'missing' + index"
+            color="#203647"
+            class="ma-1"
+          >
+            mdi-heart
+          </v-icon>
+        </div>
+      </div>
+
       <h1 v-if="tittleWhereIsLetter" class="letter-title">
         Où se trouve la lettre
         <span class="letter-color">{{ letterPossible }}</span>
@@ -33,6 +55,7 @@
         >Valider
       </v-btn>
     </v-container>
+
     <v-row justify="center">
       <v-dialog v-model="modalLetterChoose" width="600px" persistent>
         <v-card class="pa-8">
@@ -69,9 +92,7 @@
           </v-card-actions>
         </v-card>
       </v-dialog>
-    </v-row>
 
-    <v-row justify="center">
       <v-dialog v-model="modalDefeat" width="600px" persistent>
         <v-card class="pa-8">
           <v-card-title class="justify-center"> Oups..! </v-card-title>
@@ -120,9 +141,7 @@
           </v-card-actions>
         </v-card>
       </v-dialog>
-    </v-row>
 
-    <v-row justify="center">
       <v-dialog v-model="modalVictory" width="600px" persistent>
         <v-card class="pa-8">
           <v-card-title class="justify-center">
@@ -164,9 +183,7 @@
           </v-card-actions>
         </v-card>
       </v-dialog>
-    </v-row>
 
-    <v-row justify="center">
       <v-dialog v-model="modalSubmittedWord" width="600px" persistent>
         <v-card class="pa-8">
           <v-card-title class="justify-center">
@@ -216,7 +233,8 @@ export default {
     positions: "",
     askedLetter: [],
     findedWord: "",
-    score: 3,
+    totalLife: 5,
+    life: 5,
     countGuess: 1,
     newWord: ""
   }),
@@ -234,21 +252,26 @@ export default {
         .replace(/[^\w\s]/gi, "");
     },
     looseMessage() {
-      if (this.score === 0) {
-        return "Incroyable tu as réussis à me battre, aide moi à en apprendre plus";
+      if (this.life === 0) {
+        return "Incroyable tu as réussis à me battre. Aide-moi à en apprendre plus";
       }
       return "Je ne connais pas ton mot";
     },
     victoryMessage() {
-      switch (this.score) {
-        case 3:
+      switch (this.life) {
+        case 5:
           return "PERFECT GAME !!!";
-        case 2:
+        case 4:
           return "Victoire !";
-        case 1:
-          return "Oulà, j'ai eut chaud !";
+        case 3:
+          return "Facile !";
+        case 2:
+          return "Pas si simple";
       }
-      return 0;
+      return "Oulà, j'ai eu chaud !";
+    },
+    lifeMissing() {
+      return this.totalLife - this.life;
     }
   },
   methods: {
@@ -292,7 +315,7 @@ export default {
         }
       });
       if (!count) {
-        this.score--;
+        this.life--;
         if (this.letters == "") {
           this.letters += this.letterPossible;
           this.positions += 0;
@@ -314,7 +337,7 @@ export default {
             this.positions
         )
         .then((response) => {
-          if (response.data.length === 0 || this.score <= 0) {
+          if (response.data.length === 0 || this.life <= 0) {
             this.modalDefeat = true;
           } else {
             if (response.data.length > 1) {
@@ -436,5 +459,15 @@ export default {
 }
 .uppercase-modal {
   text-transform: uppercase;
+}
+.life-container {
+  width: 100%;
+  position: absolute;
+  top: 40px;
+}
+.life {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 </style>
