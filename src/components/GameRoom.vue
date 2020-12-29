@@ -32,7 +32,7 @@
         <span class="letter-color">{{ letterPossible }}</span>
         dans votre mot ?
       </h1>
-      <transition-group name="fadeLeft" appear tag="div" class="list-letters">
+      <transition-group name="slideUp" appear tag="div" class="list-letters">
         <v-card
           @click="selectLetter(letter.position)"
           :class="{ empty: !letter.value }"
@@ -241,7 +241,7 @@ export default {
   created() {
     setTimeout(() => {
       this.askLetter("e");
-    }, 1200);
+    }, 1400);
   },
   computed: {
     formattedNewWord() {

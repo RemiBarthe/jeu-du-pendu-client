@@ -2,9 +2,13 @@
   <v-app>
     <v-main class="background">
       <div class="app-background">
-        <div class="liquid"></div>
+        <div class="liquid" :class="{ animate: animate }"></div>
       </div>
-      <GameRoomContainer class="gamecontainer" />
+      <GameRoomContainer
+        class="gamecontainer"
+        @submitted="pageTransition"
+        v-show="!animate"
+      />
     </v-main>
   </v-app>
 </template>
@@ -21,8 +25,16 @@ export default {
   },
 
   data: () => ({
-    //
-  })
+    animate: false
+  }),
+  methods: {
+    pageTransition() {
+      this.animate = true;
+      setTimeout(() => {
+        this.animate = false;
+      }, 500);
+    }
+  }
 };
 </script>
 <style scoped>
@@ -50,6 +62,11 @@ export default {
   height: 2400px;
   transition: 0.5s;
   z-index: 1;
+}
+
+.app-background .animate {
+  top: -150%;
+  z-index: 99;
 }
 
 .app-background .liquid::after,
