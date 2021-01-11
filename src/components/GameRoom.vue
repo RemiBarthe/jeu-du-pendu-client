@@ -32,8 +32,14 @@
         <span class="letter-color">{{ letterPossible }}</span>
         dans votre mot ?
       </h1>
-
-      <transition-group name="slideUp" appear tag="div" class="list-letters">
+      <transition-group
+        name="slideUp"
+        ref="listLetters"
+        appear
+        tag="div"
+        class="list-letters"
+        :class="{ 'no-scroll': noScroll }"
+      >
         <v-card
           @click="selectLetter(letter.position)"
           :class="{ empty: !letter.value }"
@@ -45,6 +51,10 @@
           {{ letter.value }}
         </v-card>
       </transition-group>
+
+      <v-icon color="#ccc" class="mb-5" x-large v-if="!noScroll">
+        mdi-gesture-swipe-horizontal
+      </v-icon>
 
       <v-btn
         v-if="tittleWhereIsLetter"
@@ -237,12 +247,23 @@ export default {
     totalLife: 5,
     life: 5,
     countGuess: 1,
-    newWord: ""
+    newWord: "",
+    userWindowWidth: "",
+    listLettersWidth: ""
   }),
   created() {
     setTimeout(() => {
       this.askLetter("e");
     }, 1400);
+  },
+  mounted() {
+    this.listLettersWidth = this.$refs.listLetters.$el.scrollWidth;
+    this.userWindowWidth = window.innerWidth;
+
+    window.addEventListener("resize", () => {
+      this.userWindowWidth = window.innerWidth;
+      this.listLettersWidth = this.$refs.listLetters.$el.scrollWidth;
+    });
   },
   computed: {
     formattedNewWord() {
@@ -273,6 +294,9 @@ export default {
     },
     lifeMissing() {
       return this.totalLife - this.life;
+    },
+    noScroll() {
+      return this.listLettersWidth < this.userWindowWidth;
     }
   },
   methods: {
@@ -432,14 +456,18 @@ export default {
 .list-letters {
   display: flex;
   align-items: center;
-  justify-content: center;
   padding: 20px 0;
   width: 100%;
   overflow-x: auto;
 }
+.list-letters.no-scroll {
+  justify-content: center;
+}
+
 .list-letters .v-card {
   margin: 5px;
   width: 80px;
+  min-width: 80px;
   height: 100px;
   display: flex;
   align-items: center;
@@ -447,7 +475,6 @@ export default {
   text-transform: uppercase;
   background-color: #eda134;
   font-size: 25px;
-  min-width: 25px;
 }
 .list-letters .v-card.empty {
   background-color: #203647;
@@ -476,5 +503,14 @@ export default {
 }
 .no-break {
   word-break: normal;
+}
+
+@media only screen and (max-width: 720px) {
+  .list-letters .v-card {
+    width: 40px;
+    min-width: 40px;
+    height: 50px;
+    font-size: 25px;
+  }
 }
 </style>
