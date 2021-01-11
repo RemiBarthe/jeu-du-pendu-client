@@ -32,6 +32,7 @@
         <span class="letter-color">{{ letterPossible }}</span>
         dans votre mot ?
       </h1>
+
       <transition-group name="slideUp" appear tag="div" class="list-letters">
         <v-card
           @click="selectLetter(letter.position)"
@@ -59,7 +60,7 @@
     <v-row justify="center">
       <v-dialog v-model="modalLetterChoose" width="600px" persistent>
         <v-card class="pa-8">
-          <v-card-title class="justify-center">
+          <v-card-title class="justify-center text-center no-break">
             Cette lettre fait partie de votre mot ?
           </v-card-title>
 
@@ -152,7 +153,7 @@
             Ton mot est <span class="letter-color">{{ findedWord }}</span>
           </h1>
 
-          <v-card-title class="justify-center">
+          <v-card-title class="justify-center no-break text-center">
             Je l'ai trouvé en {{ countGuess }} coups
           </v-card-title>
 
@@ -433,6 +434,8 @@ export default {
   align-items: center;
   justify-content: center;
   padding: 20px 0;
+  width: 100%;
+  overflow-x: auto;
 }
 .list-letters .v-card {
   margin: 5px;
@@ -444,6 +447,7 @@ export default {
   text-transform: uppercase;
   background-color: #eda134;
   font-size: 25px;
+  min-width: 25px;
 }
 .list-letters .v-card.empty {
   background-color: #203647;
@@ -469,5 +473,8 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+.no-break {
+  word-break: normal;
 }
 </style>
