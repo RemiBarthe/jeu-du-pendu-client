@@ -38,6 +38,10 @@ export default {
 };
 </script>
 <style scoped>
+* {
+  touch-action: manipulation;
+}
+
 .gamecontainer {
   position: relative;
   z-index: 2;
