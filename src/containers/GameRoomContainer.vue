@@ -22,7 +22,10 @@ export default {
   }),
   methods: {
     isSubmit(number) {
-      this.word = number;
+      this.$emit("submitted");
+      setTimeout(() => {
+        this.word = number;
+      }, 500);
     }
   }
 };
