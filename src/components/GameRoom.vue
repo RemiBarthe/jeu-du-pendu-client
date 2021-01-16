@@ -48,7 +48,7 @@
           dark
           elevation="0"
         >
-          {{ letter.value }}
+          {{ letter.value ? letter.value : letter.position }}
         </v-card>
       </transition-group>
 
@@ -475,9 +475,11 @@ export default {
   text-transform: uppercase;
   background-color: #eda134;
   font-size: 25px;
+  user-select: none;
 }
 .list-letters .v-card.empty {
   background-color: #203647;
+  color: #12232e;
 }
 .list-letters p {
   font-size: 50px;
