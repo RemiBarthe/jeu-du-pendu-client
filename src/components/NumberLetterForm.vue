@@ -69,6 +69,7 @@ export default {
   margin-bottom: 0 !important;
   margin-right: 5px;
   font-size: 75px;
+  user-select: none;
 }
 .center-container {
   display: flex;
