@@ -1,5 +1,7 @@
 # client
 
+https://jeu-du-pendu.cosmono.fr/
+
 ## Project setup
 ```
 npm install
