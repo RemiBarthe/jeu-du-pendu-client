@@ -416,13 +416,12 @@ export default {
     addNewWord() {
       axios
         .get(
-          "http://jeudupenduapi-env.eba-jkmp4qhj.eu-west-3.elasticbeanstalk.com/words/" +
-            this.formattedNewWord
+          "https://jeu-du-pendu.api.cosmono.fr/words/" + this.formattedNewWord
         )
         .then((response) => {
           if (!response.data.length) {
             axios.post(
-              "http://jeudupenduapi-env.eba-jkmp4qhj.eu-west-3.elasticbeanstalk.com/words?label=" +
+              "https://jeu-du-pendu.api.cosmono.fr/words?label=" +
                 this.formattedNewWord
             );
           }
