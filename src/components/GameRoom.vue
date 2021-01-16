@@ -354,7 +354,7 @@ export default {
       this.addToLettersPositions();
       axios
         .get(
-          "http://jeudupenduapi-env.eba-jkmp4qhj.eu-west-3.elasticbeanstalk.com/words?length=" +
+          "https://jeu-du-pendu.api.cosmono.fr/words?length=" +
             this.word.length +
             "&letters=" +
             this.letters +
